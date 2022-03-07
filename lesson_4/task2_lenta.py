@@ -9,20 +9,15 @@ URL = 'http://lenta.ru'
 response = requests.get(URL, headers=headers)
 
 dom = html.fromstring(response.text)
-items = dom.xpath("//div[contains(@class, 'topnews')]")
+items = dom.xpath("//div[contains(@class, 'topnews__column')]")
 items_list = []
 
 for item in items:
-
-    try:
-        name = item.xpath("//a[contains(@class,'_topnews')]//h3/text()") \
-            if item.xpath("//a[contains(@class,'_topnews')]//h3/text()") \
-            else name = item.xpath("//span/text()")
-    except (ValueError, AttributeError):
-        name = ''
-
-    link = dom.xpath("//a[contains(@class,'_topnews')]/@href")
-    datetime_at = dom.xpath("//time/text()")
+    """Илья, в чем у меня ошибка? Я проставил точки перед xml запросами, а у меня все равно конечный список словарей
+    формируется не правильно"""
+    name = item.xpath(".//a//span/text()")
+    link = dom.xpath(".//a[contains(@class, '_topnews')]/@href")
+    datetime_at = dom.xpath(".//a//time/text()")
 
     dct = dict(name=name, link=link, datetime=datetime_at)
     items_list.append(dct)
